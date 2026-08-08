@@ -1,3 +1,4 @@
+from pathlib import Path
 import streamlit as st
 
 # Configure Streamlit page
@@ -20,12 +21,13 @@ from sklearn.metrics import (
     matthews_corrcoef,
     confusion_matrix
 )
+BASE_DIR = Path(__file__).resolve().parent
 
 # App Title
 st.title("Machine Learning Classification Model Comparison")
 
 # Load Test Dataset
-test_data = pd.read_csv("test_data.csv")
+test_data = pd.read_csv(BASE_DIR / "test_data.csv")
 
 X_test = test_data.drop("Result", axis=1)
 y_test = test_data["Result"]
@@ -33,12 +35,12 @@ y_test = test_data["Result"]
 st.write("Test Dataset Shape:", test_data.shape)
 
 # Load Trained Models and Scaler
-logistic_model = joblib.load("logistic_regression.pkl")
-decision_tree_model = joblib.load("decision_tree.pkl")
-knn_model = joblib.load("knn.pkl")
-naive_bayes_model = joblib.load("naive_bayes.pkl")
-random_forest_model = joblib.load("random_forest.pkl")
-scaler = joblib.load("scaler.pkl")
+logistic_model = joblib.load(BASE_DIR / "logistic_regression.pkl")
+decision_tree_model = joblib.load(BASE_DIR / "decision_tree.pkl")
+knn_model = joblib.load(BASE_DIR / "knn.pkl")
+naive_bayes_model = joblib.load(BASE_DIR / "naive_bayes.pkl")
+random_forest_model = joblib.load(BASE_DIR / "random_forest.pkl")
+scaler = joblib.load(BASE_DIR / "scaler.pkl")
 
 # Model Selection Dropdown
 model_name = st.selectbox(
@@ -155,3 +157,5 @@ model_descriptions = {
 # Display Model Description
 st.subheader("Model Description")
 st.write(model_descriptions[model_name])
+
+
