@@ -25,17 +25,14 @@ from sklearn.metrics import (
 # Get current application directory
 BASE_DIR = Path(__file__).resolve().parent
 
-
 # App Title
 st.title("Machine Learning Classification Model Comparison")
-
 
 # Upload Test Dataset
 uploaded_file = st.file_uploader(
     "Upload Test Dataset (CSV)",
     type=["csv"]
 )
-
 
 # Load Uploaded Test Dataset
 if uploaded_file is not None:
@@ -45,39 +42,36 @@ else:
     st.info("Please upload the test dataset (CSV) to view model results.")
     st.stop()
 
-
 # Prepare Test Data
 X_test = test_data.drop("Result", axis=1)
 y_test = test_data["Result"]
 
 st.write("Test Dataset Shape:", test_data.shape)
 
-
 # Load Trained Models and Scaler
 logistic_model = joblib.load(
-    BASE_DIR / "logistic_regression.pkl"
+    BASE_DIR / "model" / "logistic_regression.pkl"
 )
 
 decision_tree_model = joblib.load(
-    BASE_DIR / "decision_tree.pkl"
+    BASE_DIR / "model" / "decision_tree.pkl"
 )
 
 knn_model = joblib.load(
-    BASE_DIR / "knn.pkl"
+    BASE_DIR / "model" / "knn.pkl"
 )
 
 naive_bayes_model = joblib.load(
-    BASE_DIR / "naive_bayes.pkl"
+    BASE_DIR / "model" / "naive_bayes.pkl"
 )
 
 random_forest_model = joblib.load(
-    BASE_DIR / "random_forest.pkl"
+    BASE_DIR / "model" / "random_forest.pkl"
 )
 
 scaler = joblib.load(
-    BASE_DIR / "scaler.pkl"
+    BASE_DIR / "model" / "scaler.pkl"
 )
-
 
 # Model Selection Dropdown
 model_name = st.selectbox(
@@ -90,7 +84,6 @@ model_name = st.selectbox(
         "Random Forest"
     ]
 )
-
 
 # Select Model and Prepare Test Data
 if model_name == "Logistic Regression":
@@ -113,11 +106,9 @@ else:
     selected_model = random_forest_model
     X_input = X_test
 
-
 # Generate Predictions
 y_pred = selected_model.predict(X_input)
 y_prob = selected_model.predict_proba(X_input)[:, 1]
-
 
 # Calculate Evaluation Metrics
 accuracy = accuracy_score(y_test, y_pred)
@@ -126,7 +117,6 @@ precision = precision_score(y_test, y_pred)
 recall = recall_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred)
 mcc = matthews_corrcoef(y_test, y_pred)
-
 
 # Display Selected Model Performance
 st.subheader(f"{model_name} Performance")
@@ -147,7 +137,6 @@ st.dataframe(
     hide_index=True,
     use_container_width=True
 )
-
 
 # Display Confusion Matrix
 st.subheader(f"{model_name} Confusion Matrix")
@@ -172,13 +161,11 @@ ax.set_ylabel("Actual Label")
 
 plt.tight_layout()
 
-
 # Keep confusion matrix at a suitable size
 graph_col, empty_col = st.columns([1, 2])
 
 with graph_col:
     st.pyplot(fig, use_container_width=True)
-
 
 # Model Descriptions
 model_descriptions = {
@@ -202,7 +189,6 @@ model_descriptions = {
         "Random Forest is an ensemble classification algorithm that combines "
         "predictions from multiple decision trees."
 }
-
 
 # Display Model Description
 st.subheader("Model Description")
